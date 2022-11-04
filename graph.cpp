@@ -4,6 +4,11 @@
 #include <cstdlib>
 #include <iostream>
 #include <vector>
+#include <map>
+#include <string>
+#include <set>
+#include <list>
+#include <limits>
 
 using namespace std;
 
@@ -12,77 +17,153 @@ struct Node {
 public:
   dataType data;
   keyType key;
-  vector<Node> neighbors;
+  string color;
+  Node<dataType, keyType>* parent;
+  int distance;
+  vector<Node<dataType, keyType>*> neighbors;
 
-  Node(dataType data, keyType key) {
-    data = data;
-    key = key;
-  }
-
-  Node(dataType data, keyType key, vector<Node> edges) {
-    // create node with neighbors
-    data = data;
-    key = key;
-    int n = edges.size(); // number of neighbors
-    neighbors.reserve(n);
-    for (int i = 0; i < n; i++) {
-      // newNeighbor = new Node<>
-      // neighbors[i] = 
-    }
+  Node(dataType d, keyType k) {
+    data = d;
+    key = k;
   }
 };
 
 template <typename dataType, typename keyType>
-class Graph
-{
+class Graph {
 public:
+  // graph is a vector of Nodes where each Node has key, data, and neighbors
   Graph(vector<keyType> keys, vector<dataType> data, vector<vector<keyType>> edges) {
-    // create graph out of edges
-    int n = data.size();
-    graph.reserve(n);
-    map<keyType, Node> m; // map key to the node that contains this key
-    vector<vector<Node>> newEdges; 
-    newEdges.reserve(n);
+    int n = data.size(); // number of vertices
+    graph.reserve(n); // allocate memory for graph
     
-    for (int i = 0; i < n; i++) { // create all nodes and store their pointers
+    for (int i = 0; i < n; i++) { // create Nodes for all keys and store their pointers
       Node<dataType, keyType> *newNode = new Node<dataType, keyType> (data[i], keys[i]);
-      graph[i] = newNode;
-      m[keys[i]] = newNode;
+      graph.insert(graph.begin()+i, newNode);
+      table[keys[i]] = newNode;
     }
 
-    for (int i = 0; i < edges.size(); i++) { // map all edges of keys into edges of nodes
-      vector<keyType> neighbors = edges[i]sad
-      for (int j = 0; j < neighbors.size(); j++) {
-        newEdges[i].reserve(neighbors.size());
-        newEdges[i][j] = m[edges[i][j]];
-      }
-    }
-
-    for (int i = 0; i < n; i++) {
-      vector<Node> neighbors = newEdges[i];
-      for (int j=0; j > neighbors.size(); j++) {
-        add_edge()
+    for (int i=0; i < n; i++) { // add edges for all Nodes
+      Node<dataType, keyType>* from = table[keys[i]];
+      vector<keyType> neighbors = edges[i];
+      int neiSize = neighbors.size();
+      from->neighbors.reserve(neiSize);
+      for (int j = 0; j < neiSize; j++) {
+        Node<dataType, keyType>* to = table[edges[i][j]];
+        add_edge(from, to);
       }
     }
   }
 
-  ~Graph() {
-    // deallocate
+  // ~Graph() {
+  //   // deallocate
+  // }
+
+  Node<dataType, keyType>* get(keyType k) {
+    return table[k];
   }
 
-  // Node<dataType, keyType> get(keyType k);
-  bool reachable(keyType u, keyType v);
-  void bfs(keyType s);
-  void print_path(keyType u, keyType v);
-  void bfs_tree(keyType s);
-  string edge_class(keyType u, keyType v);
+  bool reachable(keyType u, keyType v) {
+    this->bfs(u);
+    return table[v]->color == "black";
+  }
 
-  string to_string();
+  void bfs(keyType s) {
+    for (int i=0; i<graph.size(); i++) {
+      graph[i]->color = "white";
+      graph[i]->distance = numeric_limits<int>::max();
+      graph[i]->parent = nullptr;
+    }
+
+    Node<dataType, keyType>* sNode = table[s];
+    sNode->color = "grey";
+    sNode->distance = 0;
+    sNode->parent = nullptr;
+    list<Node<dataType, keyType>*> queue;
+    queue.push_back(sNode);
+
+    while (!queue.empty()) {
+      Node<dataType, keyType>* u = queue.front();
+      queue.pop_front();
+      vector<Node<dataType, keyType>*> neighbors = u->neighbors;
+      // cout << "queue size: " << queue.size() << endl;
+      // cout << "u data: " << u->data << endl;
+      for (int i = 0; i<neighbors.size(); i++) {
+        Node<dataType, keyType>* v = neighbors[i];
+        if (v->color == "white") {
+          v->color = "grey";
+          v->distance = u->distance + 1;
+          v->parent = u;
+          queue.push_back(v);
+        }
+      }
+      u->color = "black";
+    }
+  }
+
+  void print_path(keyType u, keyType v) {
+    this->bfs(u);
+    string path;
+    Node<dataType, keyType>* vNode = table[v];
+    // cout << table[u]->key << endl;
+    while (vNode->key != u) {
+      path = " -> " + vNode->key  + path;
+      vNode = vNode->parent;
+    }
+
+    path = vNode->key + path;
+    cout << "print_path result: " << path << endl;
+  }
+
+  void bfs_tree(keyType s) { // allocate space??
+    this->bfs(s);
+    int maxDepth = 0;
+    for (int i=0; i<graph.size(); i++) {
+      if (graph[i]->distance > maxDepth) {
+        maxDepth = graph[i]->distance;
+      }
+    }
+
+    vector<vector<string>> bfsLevel;
+    bfsLevel.reserve(maxDepth);
+    for (int i=0; i<graph.size(); i++) {
+      int level = graph[i]->distance;
+      keyType key = graph[i]->key;
+      bfsLevel[level].push_back(key);
+    }
+
+    // for (int i=0; i<bfsLevel.size(); i++) {
+      
+    // }
+  }
+
+  // string edge_class(keyType u, keyType v);
 
 private:
-  vector<Node> graph;
+  vector<Node<dataType, keyType>*> graph;
+  map<keyType, Node<dataType, keyType>*> table; // map key to Node that contains key
 
-  void deallocate(); // private method for destructor
+  void add_edge(Node<dataType, keyType>* from, Node<dataType, keyType>* to) {
+    from->neighbors.push_back(to);
+  }
+
+  // void deallocate(); // private method for destructor
+  // void find_path(Node<dataType, keyType>* from, Node<dataType, keyType>* to) {
+  //   set<keyType> visit;
+  //   list<Node<dataType, keyType>*> queue;
+  //   queue.push_back(from);
+  //   vector<keyType> path;
+
+  //   while (!queue.empty()) {
+  //     Node<dataType, keyType>* node = queue.pop_front();
+  //     bool inVisit = visit.find(node) != visit.end();
+  //     if (!inVisit) {
+  //       vector<Node<dataType, keyType>*> neighbors = node->neighbors;
+  //       for (int i = 0; i<neighbors.size(); i++) {
+          
+  //       }
+  //     }
+  //   }
+  // }
 };
 
 #endif
