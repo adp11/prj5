@@ -106,7 +106,7 @@ void test_print_path_int(Graph<int,int>* G){
         streambuf* prevbuf = cout.rdbuf(buffer.rdbuf());
         G->print_path(4, 1);
         cout.rdbuf(prevbuf);
-        cout << buffer.str() << endl;
+       
         if(buffer.str()!="4 -> 2 -> 1") {
             cout << "Incorrect path from vertex \"4\" to vertex \"1\". Expected: 4 -> 2 -> 1 but got : " << buffer.str() << endl;
         }
@@ -116,7 +116,7 @@ void test_print_path_int(Graph<int,int>* G){
 
         G->print_path(3, 1);
         cout.rdbuf(prevbuf);
-        cout << buffer.str() << endl;
+      
         if(buffer.str()!="") {
             cout << "Incorrect path from vertex \"3\" to vertex \"1\". Expected: but got : " << buffer.str() << endl;
         }
@@ -126,7 +126,7 @@ void test_print_path_int(Graph<int,int>* G){
 
         G->print_path(5, 2);
         cout.rdbuf(prevbuf);
-        cout << buffer.str() << endl;
+       
         if(buffer.str()!="5 -> 1 -> 2") {
             cout << "Incorrect path from vertex \"3\" to vertex \"1\". Expected: 5 -> 1 -> 2 but got : " << buffer.str() << endl;
         }
@@ -136,7 +136,7 @@ void test_print_path_int(Graph<int,int>* G){
 
         G->print_path(6,100);
         cout.rdbuf(prevbuf);
-        cout << buffer.str() << endl;
+       
         if(buffer.str()!="") {
             cout << "Incorrect path from vertex \"6\" to vertex \"100\". Expected: but got : " << buffer.str() << endl;
         }
@@ -151,7 +151,8 @@ void test_print_path_float(Graph<float,float>* G){
      try {
         stringstream buffer;
         streambuf* prevbuf = cout.rdbuf(buffer.rdbuf());
-        G->print_path(0.5, 9.910);
+        
+        G->print_path(0.5f, 9.910f);
         cout.rdbuf(prevbuf);
         cout << buffer.str() << endl;
         if(buffer.str()!="0.5 -> 5.99 -> 9.910") {
@@ -161,7 +162,7 @@ void test_print_path_float(Graph<float,float>* G){
         buffer.str("");        
         prevbuf = cout.rdbuf(buffer.rdbuf());
 
-        G->print_path(6.32, 7.67);
+        G->print_path(6.32f, 7.67f);
         cout.rdbuf(prevbuf);
         cout << buffer.str() << endl;
         if(buffer.str()!="") {
@@ -171,7 +172,7 @@ void test_print_path_float(Graph<float,float>* G){
         buffer.str("");        
         prevbuf = cout.rdbuf(buffer.rdbuf());
 
-        G->print_path(6.30, 7.6);
+        G->print_path(6.30f, 7.6f);
         cout.rdbuf(prevbuf);
         cout << buffer.str() << endl;
         if(buffer.str()!="") {
@@ -181,7 +182,7 @@ void test_print_path_float(Graph<float,float>* G){
         buffer.str("");        
         prevbuf = cout.rdbuf(buffer.rdbuf());
 
-        G->print_path(3.21, 3.21);
+        G->print_path(3.21f, 3.21f);
         cout.rdbuf(prevbuf);
         cout << buffer.str() << endl;
         if(buffer.str()!="3.21 -> 3.21") {
@@ -317,43 +318,43 @@ void test_edge_class_int(Graph<int,int>* G) {
 
 void test_edge_class_float(Graph<float,float>* G) {
     try {
-        string e_class =  G->edge_class(0.5, 5.99); // tree edge
+        string e_class =  G->edge_class(0.5f, 5.99f); // tree edge
         if(e_class != "tree edge") {
             cout << "Misidentified tree edge (\"0.5\", \"5.99\") as : " << e_class << endl;
         }
-        e_class =  G->edge_class(2.66, 4.75757); // tree edge
+        e_class =  G->edge_class(2.66f, 4.75757f); // tree edge
         if(e_class != "tree edge") {
             cout << "Misidentified tree edge (\"2.66\", \"4.75757\") as : " << e_class << endl;
         }
-        e_class =  G->edge_class(8.2222, 9.910); // tree edge
+        e_class =  G->edge_class(8.2222f, 9.910f); // tree edge
         if(e_class != "tree edge") {
             cout << "Misidentified tree edge (\"8.2222\", \"9.910\") as : " << e_class << endl;
         }
-        e_class = G->edge_class(1.2, 3.21); // back edge
+        e_class = G->edge_class(1.2f, 3.21f); // back edge
         if(e_class != "back edge") {
             cout << "Misidentified back edge (\"1.2\", \"3.21\") as : " << e_class << endl;
         }
-         e_class = G->edge_class(6.32, 0.5); // back edge
+         e_class = G->edge_class(6.32f, 0.5f); // back edge
         if(e_class != "back edge") {
             cout << "Misidentified back edge (\"6.32\", \"0.5\") as : " << e_class << endl;
         }
-        e_class =  G->edge_class(6.32, 7.67); // no edge
+        e_class =  G->edge_class(6.32f, 7.67f); // no edge
         if(e_class != "no edge") {
             cout << "Misidentified non-existant edge (\"6.32\", \"7.67\") as : " << e_class << endl;
         }
-        e_class = G->edge_class(2.66, 9.910); // forward edge
+        e_class = G->edge_class(2.66f, 9.910f); // forward edge
         if(e_class != "forward edge") {
             cout << "Misidentified forward edge (\"2.66\", \"9.910\") as : " << e_class << endl;
         }
-        e_class = G->edge_class(7.67, 4.75757); // cross edge
+        e_class = G->edge_class(7.67f, 4.75757f); // cross edge
         if(e_class != "cross edge") {
             cout << "Misidentified cross edge (\"7.67\", \"4.75757\") as : " << e_class << endl;
         }
-        e_class = G->edge_class(7.67, 3.21); // cross edge
+        e_class = G->edge_class(7.67f, 3.21f); // cross edge
         if(e_class != "cross edge") {
             cout << "Misidentified cross edge (\"7.67\", \"3.21\") as : " << e_class << endl;
         }
-        e_class = G->edge_class(5.99, 0.5); // cross edge
+        e_class = G->edge_class(5.99f, 0.5f); // cross edge
         if(e_class != "cross edge") {
             cout << "Misidentified cross edge (\"5.99\", \"0.5\") as : " << e_class << endl;
         }
@@ -502,7 +503,7 @@ void test_bfs_tree_float(Graph<float,float>* G) {
     try {
         stringstream buffer;
         streambuf* prevbuf = cout.rdbuf(buffer.rdbuf());
-        G->bfs_tree(0.5);
+        G->bfs_tree(0.5f);
         cout.rdbuf(prevbuf);
         if(buffer.str() != "0.5\n5.99\n2.66\n9.910 3.21 4.75757") {
             cout << "Incorrect bfs tree. Expected : \n0.5\n5.99\n2.66\n9.910 3.21 4.75757 \nbut got :\n" << buffer.str() << endl;
@@ -511,7 +512,7 @@ void test_bfs_tree_float(Graph<float,float>* G) {
         buffer.str("");        
         prevbuf = cout.rdbuf(buffer.rdbuf());
 
-        G->bfs_tree(0.56);
+        G->bfs_tree(0.56f);
         cout.rdbuf(prevbuf);
         if(buffer.str() != "") {
             cout << "Incorrect bfs tree. Expected : \n \nbut got :\n" << buffer.str() << endl;
@@ -520,7 +521,7 @@ void test_bfs_tree_float(Graph<float,float>* G) {
         buffer.str("");        
         prevbuf = cout.rdbuf(buffer.rdbuf());
 
-        G->bfs_tree(7.67);
+        G->bfs_tree(7.67f);
         cout.rdbuf(prevbuf);
         if(buffer.str() != "7.67\n3.21 4.75757\n0.5\n5.99\n2.66\n9.910 3.21 4.75757") {
             cout << "Incorrect bfs tree. Expected : \n7.67\n3.21 4.75757\n0.5\n5.99\n2.66\n9.910 3.21 4.75757 \nbut got :\n" << buffer.str() << endl;
@@ -529,7 +530,7 @@ void test_bfs_tree_float(Graph<float,float>* G) {
         buffer.str("");        
         prevbuf = cout.rdbuf(buffer.rdbuf());
 
-        G->bfs_tree(3.21);
+        G->bfs_tree(3.21f);
         cout.rdbuf(prevbuf);
         if(buffer.str() != "3.21") {
             cout << "Incorrect bfs tree. Expected : \n3.21 \nbut got :\n" << buffer.str() << endl;
@@ -538,7 +539,7 @@ void test_bfs_tree_float(Graph<float,float>* G) {
         buffer.str("");        
         prevbuf = cout.rdbuf(buffer.rdbuf());
 
-        G->bfs_tree(8.2222);
+        G->bfs_tree(8.2222f);
         cout.rdbuf(prevbuf);
         if(buffer.str() != "8.2222\n9.910") {
             cout << "Incorrect bfs tree. Expected : \n8.2222\n9.910 \nbut got :\n" << buffer.str() << endl;
@@ -610,9 +611,9 @@ int main() {
     vector<vector<int> > edges1{{2},{1},{3},{2,5},{1},{2}};
     Graph<int,int>* intG = new Graph<int,int>(keys1, data1, edges1);
 
-    vector<float> keys2{0.5,1.2,2.66,3.21,4.75757,5.99,6.32,7.67,8.2222,9.910};
-    vector<float> data2{0.58, 18.4, 3.2, 77.77, 2.2, 4.67, 60.0, 854.02, 644.23};
-    vector<vector<float> > edges2{{5.99},{3.21,7.67},{4.75757,3.21,8.2222,9.910},{3.21},{0.5},{2.66,0.5},{0.5},{7.67,4.75757,3.21},{8.2222,9.910},{9.910}};
+    vector<float> keys2{0.5f,1.2f,2.66f,3.21f,4.75757f,5.99f,6.32f,7.67f,8.2222f,9.910f};
+    vector<float> data2{0.58f, 18.4f, 3.2f, 77.77f, 2.2f, 4.67f, 60.0f, 854.02f, 644.23f};
+    vector<vector<float> > edges2{{5.99f},{3.21f,7.67f},{4.75757f,3.21f,8.2222f,9.910f},{3.21f},{0.5f},{2.66f,0.5f},{0.5f},{7.67f,4.75757f,3.21f},{8.2222f,9.910f},{9.910}};
     Graph<float,float>* floatG = new Graph<float,float>(keys2, data2, edges2);
 
     vector<char> keys3{'a'};
@@ -625,14 +626,12 @@ int main() {
     vector<vector<string> > edges4;
     Graph<string,string>* emptyG = new Graph<string,string>(keys4, data4, edges4);
 
-
     test_print_path_string(stringG);
     test_print_path_int(intG);
     test_print_path_float(floatG);
     test_print_path_char(charG);
     test_print_path_empty(emptyG);
-
-
+   
     test_edge_class_string(stringG);
     test_edge_class_int(intG);
     test_edge_class_float(floatG);
