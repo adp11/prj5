@@ -15,30 +15,36 @@ using namespace std;
 template <typename dataType, typename keyType>
 struct Node {
 public:
-  dataType data;
-  keyType key;
-  bool color; // true: black; false: white
-  Node<dataType, keyType>* parent;
-  int distance;
-  int dTime;
-  int fTime;
-  vector<Node<dataType, keyType>*> neighbors;
+  dataType data; // data of Node
+  keyType key; // key of Node
+  bool visited; // equivalent to color of Node
+  Node<dataType, keyType>* parent; // equivalent to pi of Node
+  int distance; // distance from sourceNode in bfs
+  int dTime; // discovery time in dfs
+  int fTime; // finish time in dfs
+  vector<Node<dataType, keyType>*> neighbors; // Nodes that this Node has edges to 
 
-  Node(dataType d, keyType k) {
+  Node(dataType d, keyType k) { // constructor for Node
     data = d;
     key = k;
+  }
+
+  ~Node() { // need destructor for Node, any memory leak issue?
   }
 };
 
 template <typename dataType, typename keyType>
 class Graph {
 public:
-  // graph is a vector of Nodes where each Node has key, data, and neighbors
+  /**
+   * Precondition: vector of keys, vector of data, and vector of edges. They are all assumed to be of same size
+   * Postcondition: a Graph object is created
+   */
   Graph(vector<keyType> keys, vector<dataType> data, vector<vector<keyType>> edges) {
     int n = data.size(); // number of vertices
     graph.reserve(n); // allocate memory for vector of vertices
     
-    for (int i = 0; i < n; i++) { // create Nodes, store these Nodes in a hash table for fast lookup, and insert each Node in graph 
+    for (int i = 0; i < n; i++) { // create Nodes from all given keys, store these Nodes in a hash table for fast lookup, and insert each Node in graph 
       Node<dataType, keyType> *newNode = new Node<dataType, keyType> (data[i], keys[i]);
       graph.insert(graph.begin()+i, newNode);
       table[keys[i]] = newNode;
@@ -60,19 +66,31 @@ public:
     deallocate();
   }
 
+  /**
+   * Precondition: param k is of type "keyType"
+   * Postcondition: return Node whose key is same as k
+   */
   Node<dataType, keyType>* get(keyType k) {
-    return table[k]; // return Node via fast lookup in hash table
+    return table[k];
   }
 
+  /**
+   * Precondition: params u and v are of type "keyType". u and v could be invalid keys that don't exist
+   * Postcondition: return true if v is reachable from u and false otherwise
+   */
   bool reachable(keyType u, keyType v) {
     // check if either key is not in set of vertices
     if (table.find(u) == table.end() || table.find(v) == table.end()) {
       return false;
     }
     this->bfs(u);
-    return table[v]->color == true;
+    return table[v]->visited == true;
   }
 
+  /**
+   * Precondition: param s is of type "keyType", s is the source from which the bfs algorithm starts its exploration
+   * Postcondition: return nothing, we should have an encoded bfs tree via properties such as parent, visited, and distance
+   */
   void bfs(keyType s) {
     // check if key is not in set of vertices
     if (table.find(s) == table.end()) {
@@ -80,12 +98,12 @@ public:
     }
 
     for (int i=0; i<graph.size(); i++) {
-      graph[i]->color = false;
+      graph[i]->visited = false;
       graph[i]->distance = numeric_limits<int>::max();
       graph[i]->parent = nullptr;
     }
     Node<dataType, keyType>* sNode = table[s];
-    sNode->color = true;
+    sNode->visited = true;
     sNode->distance = 0;
     sNode->parent = nullptr;
 
@@ -97,8 +115,8 @@ public:
       vector<Node<dataType, keyType>*> neighbors = u->neighbors;
       for (int i = 0; i<neighbors.size(); i++) {
         Node<dataType, keyType>* v = neighbors[i];
-        if (v->color == false) {
-          v->color = true;
+        if (v->visited == false) {
+          v->visited = true;
           v->distance = u->distance + 1;
           v->parent = u;
           queue.push_back(v);
@@ -107,7 +125,10 @@ public:
     }
   }
 
-
+  /**
+   * Precondition: params u and v are of type "keyType"
+   * Postcondition: return nothing, print out the path from u to v if reachable and print empty string otherwise
+   */
   void print_path(keyType u, keyType v) {
     this->bfs(u);
     string path;
@@ -126,6 +147,10 @@ public:
     
   }
 
+  /**
+   * Precondition: param s is of type "keyType", s is the source from which the bfs algorithm starts its exploration, and s could be invalid key where it doesn't exist
+   * Postcondition: return nothing, but print out the bfs tree/level order traversal
+   */
   void bfs_tree(keyType s) {
     // check if key is not in set of vertices
     if (table.find(s) == table.end()) {
@@ -165,8 +190,10 @@ public:
     cout << string_tree;
   }
 
-
-  
+  /**
+   * Precondition: params u and v are of type "keyType", u and v could be invalid keys where they don't exist
+   * Postcondition: return the type of edge from u to v (if any), return "no edge" otherwise
+   */
   string edge_class(keyType u, keyType v) {
     // check if either key is not in set of vertices
     if (table.find(u) == table.end() || table.find(v) == table.end()) {
@@ -189,14 +216,14 @@ public:
     }
 
     if (edgeExist) {
-      if (startU >= startV && endU <= endV) {
+      if (startU >= startV && endU <= endV) { // uInterval is completely contained in vInterval
         return "back edge";
-      } else if (startU <= startV && endU >= endV) {
+      } else if (startU <= startV && endU >= endV) { // vInterval is completely contained in uInterval
         if (vNode->parent == uNode) {
           return "tree edge";
         }
         return "forward edge";
-      } else if (endU < startV || endV < startU) {
+      } else if (endU < startV || endV < startU) { // uInterval and vInterval are disjoint
         return "cross edge";
       }
     }
@@ -208,41 +235,54 @@ private:
   map<keyType, Node<dataType, keyType>*> table; // map key to Node that contains key
   int time;
 
+  /**
+   * Precondition: params from and to are pointers of type Node
+   * Postcondition: return nothing, but add "to" to the list of neighbors of "from"
+   */
   void add_edge(Node<dataType, keyType>* from, Node<dataType, keyType>* to) {
     from->neighbors.push_back(to);
   }
 
+  // helper function of main function dfs()
   void dfs_visit(Node<dataType, keyType>* u) {
     time += 1;
     u->dTime = time;
-    u->color = true;
+    u->visited = true;
     for (int i=0; i<u->neighbors.size(); i++) {
       Node<dataType, keyType>* v = u->neighbors[i];
-      if (!v->color) {
+      if (!v->visited) {
         v->parent = u;
         dfs_visit(v);
       }
     }
-    u->color = true;
+    u->visited = true;
     time += 1;
     u->fTime = time;
   }
 
+  /**
+   * Precondition: no param needed
+   * Postcondition: return nothing, but we should have an encoded dfs forest via properties such as parent, visited, and we should also have useful properties like discovery time and finish time of every Node to determine edge class
+   */
   void dfs() {
     for (int i=0; i<graph.size(); i++) {
-      graph[i]->color = false;
+      graph[i]->visited = false;
       graph[i]->parent = nullptr;
     }
 
     time = 0;
 
     for (int i=0; i<graph.size(); i++) {
-      if (!graph[i]->color) {
+      if (!graph[i]->visited) {
         dfs_visit(graph[i]);
       }
     }
   }
 
+  /**
+   * Precondition: no param needed
+   * Postcondition: return nothing, but we delete all memory that got allocated with "new"
+   */
   void deallocate() {
     for (int i = 0; i<graph.size(); i++) {
       delete graph[i];
