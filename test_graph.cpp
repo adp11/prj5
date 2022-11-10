@@ -11,13 +11,14 @@ int main() {
   Graph<int, string>* G = new Graph<int, string>(keys, data, adjs);
   cout << "created graph!" << endl;
 
-  G->bfs("T");
+  // G->bfs("T");
   // if (G->reachable("D", "B")) {
   //   cout << "TRUE" << endl;
   // } else {
   //   cout << "FALSE" << endl;
   // }
-  G->print_path("T", "V");
+  // G->print_path("Y", "Y");
   // cout << G->get("D")->data << endl;
+  G->bfs_tree("T");
   return 0;
 }

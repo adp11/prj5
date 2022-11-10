@@ -9,25 +9,30 @@
 #include <sstream>
 #include "graph.cpp"
 
-Graph<string, string>* generate_graph(string fname){
+Graph<string, string> *generate_graph(string fname)
+{
     string line;
     ifstream infile(fname);
     vector<string> keys = {};
     vector<string> data = {};
     vector<vector<string>> adjs = {};
-    if(infile.is_open()){
-        while(getline(infile, line)){
+    if (infile.is_open())
+    {
+        while (getline(infile, line))
+        {
             unsigned long delim = line.find(":");
             string key = line.substr(0, delim);
-            string adj = line.substr(delim+1);
-            
+            string adj = line.substr(delim + 1);
+
             keys.push_back(key);
             data.push_back(key + " data");
             delim = adj.find(",");
             vector<string> adj_lst = {};
-            while(delim != string::npos){
+            // while (delim != string::npos)
+            while (delim < adj.length())
+            {
                 adj_lst.push_back(adj.substr(0, delim));
-                adj = adj.substr(delim+1);
+                adj = adj.substr(delim + 1);
                 delim = adj.find(",");
             }
             adj_lst.push_back(adj);
@@ -41,7 +46,7 @@ Graph<string, string>* generate_graph(string fname){
 void test_get(Graph<string,string>* G) {
     try {
         if(G->get("S")==nullptr || G->get("S")->data != "S data") {
-            cout << "Incorrect result getting vertex \"s\"" << endl; 
+            cout << "Incorrect result getting vertex \"s\"" << endl;
         }
         if(G->get("a") != nullptr) {
             cout << "Incorrect result getting non-existant vertex \"a\"" << endl;
@@ -79,7 +84,7 @@ void test_bfs(Graph<string,string>* G) {
         }
     } catch(exception& e) {
         cerr << "Error testing bfs : " << e.what() << endl;
-    } 
+    }
 }
 
 void test_print_path(Graph<string,string>* G) {
@@ -96,33 +101,33 @@ void test_print_path(Graph<string,string>* G) {
     }
 }
 
-// void test_edge_class(Graph<string,string>* G) {
-//     try {
-//         string e_class =  G->edge_class("R", "V"); // tree edge
-//         if(e_class != "tree edge") {
-//             cout << "Misidentified tree edge (\"R\", \"V\") as : " << e_class << endl;
-//         }
-//         e_class = G->edge_class("X", "U"); // back edge
-//         if(e_class != "back edge") {
-//             cout << "Misidentified back edge (\"X\", \"U\") as : " << e_class << endl;
-//         }
-//         e_class =  G->edge_class("R", "U"); // no edge
-//         if(e_class != "no edge") {
-//             cout << "Misidentified non-existant edge (\"R\", \"U\") as : " << e_class << endl;
-//         }
-//         e_class = G->edge_class("T", "W"); // forward edge
-//         if(e_class != "forward edge") {
-//             cout << "Misidentified forward edge (\"T\", \"W\") as : " << e_class << endl;
-//         }
-//         e_class = G->edge_class("T", "S"); // cross edge
-//         if(e_class != "cross edge") {
-//             cout << "Misidentified forward edge (\"T\", \"S\") as : " << e_class << endl;
-//         }
-//     } catch(exception& e) {
-//         cerr << "Error testing edge class : " << e.what() << endl;
-//     }
-    
-// }
+void test_edge_class(Graph<string,string>* G) {
+    try {
+        string e_class =  G->edge_class("R", "V"); // tree edge
+        if(e_class != "tree edge") {
+            cout << "Misidentified tree edge (\"R\", \"V\") as : " << e_class << endl;
+        }
+        e_class = G->edge_class("X", "U"); // back edge
+        if(e_class != "back edge") {
+            cout << "Misidentified back edge (\"X\", \"U\") as : " << e_class << endl;
+        }
+        e_class =  G->edge_class("R", "U"); // no edge
+        if(e_class != "no edge") {
+            cout << "Misidentified non-existant edge (\"R\", \"U\") as : " << e_class << endl;
+        }
+        e_class = G->edge_class("T", "W"); // forward edge
+        if(e_class != "forward edge") {
+            cout << "Misidentified forward edge (\"T\", \"W\") as : " << e_class << endl;
+        }
+        e_class = G->edge_class("T", "S"); // cross edge
+        if(e_class != "cross edge") {
+            cout << "Misidentified forward edge (\"T\", \"S\") as : " << e_class << endl;
+        }
+    } catch(exception& e) {
+        cerr << "Error testing edge class : " << e.what() << endl;
+    }
+
+}
 
 void test_bfs_tree(Graph<string,string>* G) {
     try {
@@ -136,18 +141,19 @@ void test_bfs_tree(Graph<string,string>* G) {
     } catch(exception& e) {
         cerr << "Error testing bfs tree : " << e.what() << endl;
     }
-    
+
 }
 
-int main() {
+int main()
+{
 
-    Graph<string,string>* G = generate_graph("graph_description.txt");
+    Graph<string, string> *G = generate_graph("graph_description.txt");
     test_get(G);
     test_reachable(G);
     test_bfs(G);
-    // test_print_path(G);
-    // test_edge_class(G);
-    // test_bfs_tree(G);
+    test_print_path(G);
+    test_edge_class(G);
+    test_bfs_tree(G);
 
     cout << "Testing completed" << endl;
 
