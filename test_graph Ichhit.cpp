@@ -321,11 +321,11 @@ void test_edge_class_float(Graph<float,float>* G) {
         if(e_class != "tree edge") {
             cout << "Misidentified tree edge (\"0.5\", \"5.99\") as : " << e_class << endl;
         }
-        string e_class =  G->edge_class(2.66, 4.75757); // tree edge
+        e_class =  G->edge_class(2.66, 4.75757); // tree edge
         if(e_class != "tree edge") {
             cout << "Misidentified tree edge (\"2.66\", \"4.75757\") as : " << e_class << endl;
         }
-        string e_class =  G->edge_class(8.2222, 9.910); // tree edge
+        e_class =  G->edge_class(8.2222, 9.910); // tree edge
         if(e_class != "tree edge") {
             cout << "Misidentified tree edge (\"8.2222\", \"9.910\") as : " << e_class << endl;
         }
