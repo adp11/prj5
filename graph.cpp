@@ -29,8 +29,6 @@ public:
     key = k;
   }
 
-  ~Node() { // need destructor for Node, for Graph, Table, any memory leak issue?
-  }
 };
 
 template <typename dataType, typename keyType>
@@ -64,13 +62,12 @@ public:
 
   /**
    * Precondition: no param needed
-   * Postcondition: return nothing, but we delete all memory that got allocated with "new"
+   * Postcondition: return nothing, but we delete all Node that got allocated with "new"
    */
   ~Graph() {
     for (int i = 0; i<graph.size(); i++) {
       delete graph[i];
     }
-    graph.clear();
   }
 
   /**

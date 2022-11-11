@@ -144,14 +144,7 @@ void test_bfs(Graph<string,string>* G) {
                 cout << "Incorrect bfs result. Vertex " << vertices[i] << " should have distance " << distances[i] << " from source vertex \"t\"" << endl;
             }
         }
-        // // data type of vertex  != data type of new_distance
-        // G->bfs("R");
-        // float new_distance[8] = {3.1,0.2,0.5,1.245,0.11,1.81,2.22,2.09};
-        // for(int i = 0; i < 8; i++){
-        //     if(G->get(vertices[i])==nullptr || G->get(vertices[i])->distance != new_distance[i]) {
-        //         cout << "Incorrect bfs result. Vertex " << vertices[i] << " should have distance " << distances[i] << " from source vertex \"t\"" << endl;
-        //     }
-        // }
+
     } catch(exception& e) {
         cerr << "Error testing bfs : " << e.what() << endl;
     }
@@ -463,11 +456,6 @@ void test_edge_class_string(Graph<string, string> *G)
             cout << "Misidentified non-existant edge (\"A\", \"B\") as : " << e_class << endl;
         }
 
-        // e_class = G->edge_class("R", "B"); // no edge
-        // if (e_class != "no edge")
-        // {
-        //     cout << "Misidentified non-existant edge (\"R\", \"B\") as : " << e_class << endl;
-        // }
     }
     catch (exception &e)
     {
@@ -907,7 +895,7 @@ int main() {
     test_print_path_char(charG);
     test_print_path_empty(emptyG);
 
-    // test_edge_class_string(stringG); // last case fails
+    test_edge_class_string(stringG);
     test_edge_class_int(intG);
     test_edge_class_double(doubleG);
     test_edge_class_char(charG);
@@ -944,8 +932,6 @@ int main() {
     Graph<int,char>* G2 = new Graph<int,char>(F,B,F_edges);
     Graph<string,float>* G3 = new Graph<string,float>(C,A, C_edges);
     Graph<string,string> *G4 = new Graph<string,string>(A,A1,A_edges);
-    // Graph<float,char> *G5 = new Graph<float,char>(F,C,F_edges);
-    // Graph<float,string> *G6 = new Graph<float,string>(A2,C,A2_edges);
 
     test_get(G);
     test_get_v1(G1);
@@ -953,19 +939,15 @@ int main() {
 
     test_reachable(G);
     test_reachable_v1(G3);
-    // test_reachable_v2(G6); // fix test 
 
-    test_bfs(G); // fix 2nd test (decimal distance) 
+    test_bfs(G);
     test_bfs_v1(G2);
-    // test_bfs_v2(G5); // fix test 
     
     delete G;
     delete G1;
     delete G2;
     delete G3;
     delete G4;
-    // delete G5;
-    // delete G6;
 
     cout << "Testing completed 2" << endl;
 
