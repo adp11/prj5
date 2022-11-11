@@ -654,3 +654,73 @@ int main() {
 
     return 0;
 }
+
+void print_path(keyType u, keyType v) {
+    
+    this->bfs(u);
+    string path;
+    stringstream ss;
+    Node<dataType, keyType>* vNode = table[v];
+  
+    while (vNode && vNode->key != u) { // backtrack via parent
+        ss.str("");
+        ss << vNode->key;
+      path = " -> " + ss.str()  + path;
+      vNode = vNode->parent;
+    }
+
+    if (vNode) {
+        ss.str("");
+        ss << vNode->key;
+      path = ss.str() + path;
+      cout << path;
+    } else {
+      cout << "";
+    }
+    
+  }
+
+void bfs_tree(keyType s) {
+    // check if key is not in set of vertices
+    if (table.find(s) == table.end()) {
+      throw std::invalid_argument("key not in set of vertices");
+    }
+
+    this->bfs(s);
+    int maxDepth = 0;
+    for (int i=0; i<graph.size(); i++) {
+      if (graph[i]->distance > maxDepth) {
+        maxDepth = graph[i]->distance;
+      }
+    }
+
+    vector<vector<keyType>> res;
+    res.resize(maxDepth+1);
+    for (int i=0; i<graph.size(); i++) {
+      
+      keyType key = graph[i]->key;
+      int d = graph[i]->distance;
+      res[d].push_back(key);
+    }
+
+    string string_tree;
+    stringstream ss;
+    // string_tree += s;
+    for (int i=0; i<res.size(); i++) {
+      int size = res[i].size();
+      for (int j=0; j<size; j++) {
+        if (j == size-1) {
+            ss.str("");
+            ss << res[i][j];
+          string_tree += ss.str();
+        } else {
+            ss.str("");
+            ss << res[i][j];
+          string_tree += ss.str() + " ";
+        }
+      }
+      if (i != res.size()-1) string_tree += "\n";
+    }
+    cout << string_tree;
+  }
+
