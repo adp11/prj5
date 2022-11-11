@@ -29,7 +29,7 @@ public:
     key = k;
   }
 
-  ~Node() { // need destructor for Node, any memory leak issue?
+  ~Node() { // need destructor for Node, for Graph, Table, any memory leak issue?
   }
 };
 
@@ -94,7 +94,9 @@ public:
   void bfs(keyType s) {
     // check if key is not in set of vertices
     if (table.find(s) == table.end()) {
-      throw std::invalid_argument("key not in set of vertices");
+      cout << "";
+      return;
+      // throw std::invalid_argument("key not in set of vertices");
     }
 
     for (int i=0; i<graph.size(); i++) {
@@ -129,17 +131,40 @@ public:
    * Precondition: params u and v are of type "keyType"
    * Postcondition: return nothing, print out the path from u to v if reachable and print empty string otherwise
    */
+  // void print_path(keyType u, keyType v) {
+  //   this->bfs(u);
+  //   string path;
+  //   Node<dataType, keyType>* vNode = table[v];
+  //   while (vNode && vNode->key != u) { // backtrack via parent
+  //     path = " -> " + vNode->key  + path;
+  //     vNode = vNode->parent;
+  //   }
+
+  //   if (vNode) {
+  //     path = vNode->key + path;
+  //     cout << path;
+  //   } else {
+  //     cout << "";
+  //   }
+    
+  // }
   void print_path(keyType u, keyType v) {
     this->bfs(u);
     string path;
+    stringstream ss;
     Node<dataType, keyType>* vNode = table[v];
+  
     while (vNode && vNode->key != u) { // backtrack via parent
-      path = " -> " + vNode->key  + path;
+        ss.str("");
+        ss << vNode->key;
+      path = " -> " + ss.str()  + path;
       vNode = vNode->parent;
     }
 
     if (vNode) {
-      path = vNode->key + path;
+        ss.str("");
+        ss << vNode->key;
+      path = ss.str() + path;
       cout << path;
     } else {
       cout << "";
@@ -151,10 +176,50 @@ public:
    * Precondition: param s is of type "keyType", s is the source from which the bfs algorithm starts its exploration, and s could be invalid key where it doesn't exist
    * Postcondition: return nothing, but print out the bfs tree/level order traversal
    */
+  // void bfs_tree(keyType s) {
+  //   // check if key is not in set of vertices
+  //   if (table.find(s) == table.end()) {
+  //     throw std::invalid_argument("key not in set of vertices");
+  //   }
+
+  //   this->bfs(s);
+  //   int maxDepth = 0;
+  //   for (int i=0; i<graph.size(); i++) {
+  //     if (graph[i]->distance > maxDepth) {
+  //       maxDepth = graph[i]->distance;
+  //     }
+  //   }
+
+  //   vector<vector<string>> res;
+  //   res.resize(maxDepth+1);
+  //   for (int i=0; i<graph.size(); i++) {
+      
+  //     keyType key = graph[i]->key;
+  //     int d = graph[i]->distance;
+  //     res[d].push_back(key);
+  //   }
+
+  //   string string_tree;
+  //   // string_tree += s;
+  //   for (int i=0; i<res.size(); i++) {
+  //     int size = res[i].size();
+  //     for (int j=0; j<size; j++) {
+  //       if (j == size-1) {
+  //         string_tree += res[i][j];
+  //       } else {
+  //         string_tree += res[i][j] + " ";
+  //       }
+  //     }
+  //     if (i != res.size()-1) string_tree += "\n";
+  //   }
+  //   cout << string_tree;
+  // }
   void bfs_tree(keyType s) {
     // check if key is not in set of vertices
     if (table.find(s) == table.end()) {
-      throw std::invalid_argument("key not in set of vertices");
+      // throw std::invalid_argument("key not in set of vertices");
+      cout << "";
+      return;
     }
 
     this->bfs(s);
@@ -165,30 +230,37 @@ public:
       }
     }
 
-    vector<vector<string>> res;
+    vector<vector<keyType>> res;
     res.resize(maxDepth+1);
     for (int i=0; i<graph.size(); i++) {
       
       keyType key = graph[i]->key;
       int d = graph[i]->distance;
-      res[d].push_back(key);
+      res[d].push_back(key); // potential error
     }
 
     string string_tree;
+    stringstream ss;
     // string_tree += s;
     for (int i=0; i<res.size(); i++) {
       int size = res[i].size();
       for (int j=0; j<size; j++) {
         if (j == size-1) {
-          string_tree += res[i][j];
+            ss.str("");
+            ss << res[i][j];
+          string_tree += ss.str();
         } else {
-          string_tree += res[i][j] + " ";
+            ss.str("");
+            ss << res[i][j];
+          string_tree += ss.str() + " ";
         }
       }
       if (i != res.size()-1) string_tree += "\n";
     }
     cout << string_tree;
   }
+
+
 
   /**
    * Precondition: params u and v are of type "keyType", u and v could be invalid keys where they don't exist
@@ -197,9 +269,23 @@ public:
   string edge_class(keyType u, keyType v) {
     // check if either key is not in set of vertices
     if (table.find(u) == table.end() || table.find(v) == table.end()) {
-      throw std::invalid_argument("key not in set of vertices");
+      return "no edge";
     }
+    // if (table.find(u) == table.end()) {
+    //   cout << u << "  NOT FOUND"<< endl;
+    // } else {
+    //   cout << "FOUND" << endl;
+    // }
 
+    // if (table.find(v) == table.end()) {
+    //   cout << v << "  NOT FOUND"<< endl;
+    // } else {
+    //   cout << "FOUND" << endl;
+    // }
+    
+    // cout << v << "  "<<table.count(v) << endl;
+
+    // return "random";
     dfs();
     Node<dataType, keyType>* uNode = table[u];
     Node<dataType, keyType>* vNode = table[v];
