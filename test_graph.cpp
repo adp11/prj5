@@ -311,60 +311,61 @@ void test_print_path_int(Graph<int, int> *G)
     }
 }
 
-// void test_print_path_double(Graph<double, double> *G)
-// {
+void test_print_path_double(Graph<double, double> *G)
+{
 
-//     try
-//     {
-//         stringstream buffer;
-//         streambuf *prevbuf = cout.rdbuf(buffer.rdbuf());
+    try
+    {
+        stringstream buffer;
+        streambuf *prevbuf = cout.rdbuf(buffer.rdbuf());
 
-//         G->print_path(0.5, 9.910);
-//         cout.rdbuf(prevbuf);
-//         cout << buffer.str() << endl;
-//         if (buffer.str() != "0.5 -> 5.99 -> 9.910")
-//         {
-//             cout << "Incorrect path from vertex \"0.5\" to vertex \"9.910\". Expected: 0.5 -> 5.99 -> 9.910 but got : " << buffer.str() << endl;
-//         }
+        G->print_path(0.5, 9.91);
+        cout.rdbuf(prevbuf);
 
-//         buffer.str("");
-//         prevbuf = cout.rdbuf(buffer.rdbuf());
+        if (buffer.str() != "0.5 -> 5.99 -> 2.66 -> 9.91")
+        {
+            cout << "Incorrect path from vertex \"0.5\" to vertex \"9.91\". Expected: 0.5 -> 5.99 -> 2.66 -> 9.91 but got : " << buffer.str() << endl;
+        }
 
-//         G->print_path(6.32, 7.67);
-//         cout.rdbuf(prevbuf);
-//         cout << buffer.str() << endl;
-//         if (buffer.str() != "")
-//         {
-//             cout << "Incorrect path from vertex \"6.32\" to vertex \"7.67\". Expected: but got : " << buffer.str() << endl;
-//         }
+        buffer.str("");
+        prevbuf = cout.rdbuf(buffer.rdbuf());
 
-//         buffer.str("");
-//         prevbuf = cout.rdbuf(buffer.rdbuf());
+        G->print_path(6.32, 7.67);
+        cout.rdbuf(prevbuf);
+    
+        if (buffer.str() != "")
+        {
+            cout << "Incorrect path from vertex \"6.32\" to vertex \"7.67\". Expected: but got : " << buffer.str() << endl;
+        }
 
-//         G->print_path(6.30, 7.6);
-//         cout.rdbuf(prevbuf);
-//         cout << buffer.str() << endl;
-//         if (buffer.str() != "")
-//         {
-//             cout << "Incorrect path from vertex \"6.30\" to vertex \"7.6\". Expected: but got : " << buffer.str() << endl;
-//         }
+        buffer.str("");
+        prevbuf = cout.rdbuf(buffer.rdbuf());
 
-//         buffer.str("");
-//         prevbuf = cout.rdbuf(buffer.rdbuf());
+        G->print_path(6.3, 7.6);
+        cout.rdbuf(prevbuf);
+  
+        if (buffer.str() != "")
+        {
+            cout << "Incorrect path from vertex \"6.30\" to vertex \"7.6\". Expected: but got : " << buffer.str() << endl;
+        }
 
-//         G->print_path(3.21, 3.21);
-//         cout.rdbuf(prevbuf);
-//         cout << buffer.str() << endl;
-//         if (buffer.str() != "3.21 -> 3.21")
-//         {
-//             cout << "Incorrect path from vertex \"3.21\" to vertex \"3.21\". Expected: but got : " << buffer.str() << endl;
-//         }
-//     }
-//     catch (exception &e)
-//     {
-//         cerr << "Error testing print path : " << e.what() << endl;
-//     }
-// }
+        buffer.str("");
+        prevbuf = cout.rdbuf(buffer.rdbuf());
+
+        G->print_path(3.21, 3.21);
+        cout.rdbuf(prevbuf);
+  
+     
+        if (buffer.str() != "3.21")
+        {
+            cout << "Incorrect path from vertex \"3.21\" to vertex \"3.21\". Expected: 3.21 but got : " << buffer.str() << endl;
+        }
+    }
+    catch (exception &e)
+    {
+        cerr << "Error testing print path : " << e.what() << endl;
+    }
+}
 
 void test_print_path_char(Graph<char, char> *G)
 {
@@ -515,66 +516,66 @@ void test_edge_class_int(Graph<int, int> *G)
     }
 }
 
-// void test_edge_class_double(Graph<double, double> *G)
-// {
-//     try
-//     {
-//         string e_class = G->edge_class(0.5f, 5.99f); // tree edge
-//         if (e_class != "tree edge")
-//         {
-//             cout << "Misidentified tree edge (\"0.5\", \"5.99\") as : " << e_class << endl;
-//         }
-//         e_class = G->edge_class(2.66f, 4.75757f); // tree edge
-//         if (e_class != "tree edge")
-//         {
-//             cout << "Misidentified tree edge (\"2.66\", \"4.75757\") as : " << e_class << endl;
-//         }
-//         e_class = G->edge_class(8.2222f, 9.910f); // tree edge
-//         if (e_class != "tree edge")
-//         {
-//             cout << "Misidentified tree edge (\"8.2222\", \"9.910\") as : " << e_class << endl;
-//         }
-//         e_class = G->edge_class(1.2f, 3.21f); // back edge
-//         if (e_class != "back edge")
-//         {
-//             cout << "Misidentified back edge (\"1.2\", \"3.21\") as : " << e_class << endl;
-//         }
-//         e_class = G->edge_class(6.32f, 0.5f); // back edge
-//         if (e_class != "back edge")
-//         {
-//             cout << "Misidentified back edge (\"6.32\", \"0.5\") as : " << e_class << endl;
-//         }
-//         e_class = G->edge_class(6.32f, 7.67f); // no edge
-//         if (e_class != "no edge")
-//         {
-//             cout << "Misidentified non-existant edge (\"6.32\", \"7.67\") as : " << e_class << endl;
-//         }
-//         e_class = G->edge_class(2.66f, 9.910f); // forward edge
-//         if (e_class != "forward edge")
-//         {
-//             cout << "Misidentified forward edge (\"2.66\", \"9.910\") as : " << e_class << endl;
-//         }
-//         e_class = G->edge_class(7.67f, 4.75757f); // cross edge
-//         if (e_class != "cross edge")
-//         {
-//             cout << "Misidentified cross edge (\"7.67\", \"4.75757\") as : " << e_class << endl;
-//         }
-//         e_class = G->edge_class(7.67f, 3.21f); // cross edge
-//         if (e_class != "cross edge")
-//         {
-//             cout << "Misidentified cross edge (\"7.67\", \"3.21\") as : " << e_class << endl;
-//         }
-//         e_class = G->edge_class(5.99f, 0.5f); // cross edge
-//         if (e_class != "cross edge")
-//         {
-//             cout << "Misidentified cross edge (\"5.99\", \"0.5\") as : " << e_class << endl;
-//         }
-//     }
-//     catch (exception &e)
-//     {
-//         cerr << "Error testing edge class : " << e.what() << endl;
-//     }
-// }
+void test_edge_class_double(Graph<double, double> *G)
+{
+    try
+    {
+        string e_class = G->edge_class(0.5, 5.99); // tree edge
+        if (e_class != "tree edge")
+        {
+            cout << "Misidentified tree edge (\"0.5\", \"5.99\") as : " << e_class << endl;
+        }
+        e_class = G->edge_class(2.66, 4.75757); // tree edge
+        if (e_class != "tree edge")
+        {
+            cout << "Misidentified tree edge (\"2.66\", \"4.75757\") as : " << e_class << endl;
+        }
+        e_class = G->edge_class(8.2222, 9.91); // tree edge
+        if (e_class != "tree edge")
+        {
+            cout << "Misidentified tree edge (\"8.2222\", \"9.910\") as : " << e_class << endl;
+        }
+        e_class = G->edge_class(1.2, 3.21); // back edge
+        if (e_class != "back edge")
+        {
+            cout << "Misidentified back edge (\"1.2\", \"3.21\") as : " << e_class << endl;
+        }
+        e_class = G->edge_class(6.32, 0.5); // back edge
+        if (e_class != "back edge")
+        {
+            cout << "Misidentified back edge (\"6.32\", \"0.5\") as : " << e_class << endl;
+        }
+        e_class = G->edge_class(6.32, 7.67); // no edge
+        if (e_class != "no edge")
+        {
+            cout << "Misidentified non-existant edge (\"6.32\", \"7.67\") as : " << e_class << endl;
+        }
+        e_class = G->edge_class(2.66, 9.910); // forward edge
+        if (e_class != "forward edge")
+        {
+            cout << "Misidentified forward edge (\"2.66\", \"9.910\") as : " << e_class << endl;
+        }
+        e_class = G->edge_class(7.67, 4.75757); // cross edge
+        if (e_class != "cross edge")
+        {
+            cout << "Misidentified cross edge (\"7.67\", \"4.75757\") as : " << e_class << endl;
+        }
+        e_class = G->edge_class(7.67, 3.21); // cross edge
+        if (e_class != "cross edge")
+        {
+            cout << "Misidentified cross edge (\"7.67\", \"3.21\") as : " << e_class << endl;
+        }
+        e_class = G->edge_class(5.99, 0.5); // cross edge
+        if (e_class != "cross edge")
+        {
+            cout << "Misidentified cross edge (\"5.99\", \"0.5\") as : " << e_class << endl;
+        }
+    }
+    catch (exception &e)
+    {
+        cerr << "Error testing edge class : " << e.what() << endl;
+    }
+}
 
 void test_edge_class_char(Graph<char, char> *G)
 {
@@ -742,69 +743,69 @@ void test_bfs_tree_int(Graph<int, int> *G)
     }
 }
 
-// void test_bfs_tree_double(Graph<double, double> *G)
-// {
-//     try
-//     {
-//         stringstream buffer;
-//         streambuf *prevbuf = cout.rdbuf(buffer.rdbuf());
-//         G->bfs_tree(0.5f);
-//         cout.rdbuf(prevbuf);
-//         if (buffer.str() != "0.5\n5.99\n2.66\n9.910 3.21 4.75757")
-//         {
-//             cout << "Incorrect bfs tree. Expected : \n0.5\n5.99\n2.66\n9.910 3.21 4.75757 \nbut got :\n"
-//                  << buffer.str() << endl;
-//         }
+void test_bfs_tree_double(Graph<double, double> *G)
+{
+    try
+    {
+        stringstream buffer;
+        streambuf *prevbuf = cout.rdbuf(buffer.rdbuf());
+        G->bfs_tree(0.5);
+        cout.rdbuf(prevbuf);
+        if (buffer.str() != "0.5\n5.99\n2.66\n9.91 3.21 4.75757")
+        {
+            cout << "Incorrect bfs tree. Expected : \n0.5\n5.99\n2.66\n9.91 3.21 4.75757 \nbut got :\n"
+                 << buffer.str() << endl;
+        }
 
-//         buffer.str("");
-//         prevbuf = cout.rdbuf(buffer.rdbuf());
+        buffer.str("");
+        prevbuf = cout.rdbuf(buffer.rdbuf());
 
-//         G->bfs_tree(0.56f);
-//         cout.rdbuf(prevbuf);
-//         if (buffer.str() != "")
-//         {
-//             cout << "Incorrect bfs tree. Expected : \n \nbut got :\n"
-//                  << buffer.str() << endl;
-//         }
+        G->bfs_tree(0.56);
+        cout.rdbuf(prevbuf);
+        if (buffer.str() != "")
+        {
+            cout << "Incorrect bfs tree. Expected : \n \nbut got :\n"
+                 << buffer.str() << endl;
+        }
 
-//         buffer.str("");
-//         prevbuf = cout.rdbuf(buffer.rdbuf());
+        buffer.str("");
+        prevbuf = cout.rdbuf(buffer.rdbuf());
 
-//         G->bfs_tree(7.67f);
-//         cout.rdbuf(prevbuf);
-//         if (buffer.str() != "7.67\n3.21 4.75757\n0.5\n5.99\n2.66\n9.910 3.21 4.75757")
-//         {
-//             cout << "Incorrect bfs tree. Expected : \n7.67\n3.21 4.75757\n0.5\n5.99\n2.66\n9.910 3.21 4.75757 \nbut got :\n"
-//                  << buffer.str() << endl;
-//         }
+        G->bfs_tree(7.67);
+        cout.rdbuf(prevbuf);
+        if (buffer.str() != "7.67\n3.21 4.75757\n0.5\n5.99\n2.66\n9.91 3.21 4.75757")
+        {
+            cout << "Incorrect bfs tree. Expected : \n7.67\n3.21 4.75757\n0.5\n5.99\n2.66\n9.91 3.21 4.75757 \nbut got :\n"
+                 << buffer.str() << endl;
+        }
 
-//         buffer.str("");
-//         prevbuf = cout.rdbuf(buffer.rdbuf());
+        buffer.str("");
+        prevbuf = cout.rdbuf(buffer.rdbuf());
 
-//         G->bfs_tree(3.21f);
-//         cout.rdbuf(prevbuf);
-//         if (buffer.str() != "3.21")
-//         {
-//             cout << "Incorrect bfs tree. Expected : \n3.21 \nbut got :\n"
-//                  << buffer.str() << endl;
-//         }
+        G->bfs_tree(3.21);
+        cout.rdbuf(prevbuf);
+        if (buffer.str() != "3.21")
+        {
+            cout << "Incorrect bfs tree. Expected : \n3.21 \nbut got :\n"
+                 << buffer.str() << endl;
+        }
 
-//         buffer.str("");
-//         prevbuf = cout.rdbuf(buffer.rdbuf());
+        buffer.str("");
+        prevbuf = cout.rdbuf(buffer.rdbuf());
 
-//         G->bfs_tree(8.2222f);
-//         cout.rdbuf(prevbuf);
-//         if (buffer.str() != "8.2222\n9.910")
-//         {
-//             cout << "Incorrect bfs tree. Expected : \n8.2222\n9.910 \nbut got :\n"
-//                  << buffer.str() << endl;
-//         }
-//     }
-//     catch (exception &e)
-//     {
-//         cerr << "Error testing bfs tree : " << e.what() << endl;
-//     }
-// }
+        G->bfs_tree(8.2222);
+        cout.rdbuf(prevbuf);
+        if (buffer.str() != "8.2222\n9.91")
+        {
+            cout << "Incorrect bfs tree. Expected : \n8.2222\n9.91 \nbut got :\n"
+                 << buffer.str() << endl;
+        }
+    }
+    catch (exception &e)
+    {
+        cerr << "Error testing bfs tree : " << e.what() << endl;
+    }
+}
 
 void test_bfs_tree_char(Graph<char, char> *G)
 {
@@ -877,9 +878,9 @@ int main() {
     vector<vector<int> > edges1{{2},{1},{3},{2,5},{1},{2}};
     Graph<int,int>* intG = new Graph<int,int>(keys1, data1, edges1);
 
-    vector<double> keys2{0.5,1.2,2.66,3.21,4.75757,5.99,6.32,7.67,8.2222,9.910};
-    vector<double> data2{0.58, 18.4, 3.2, 77.77, 2.2, 4.67, 60.0, 854.02, 644.23};
-    vector<vector<double> > edges2{{5.99},{3.21,7.67},{4.75757,3.21,8.2222,9.910},{3.21},{0.5},{2.66,0.5},{0.5},{7.67,4.75757,3.21},{8.2222,9.910},{9.910}};
+    vector<double> keys2{0.5,1.2,2.66,3.21,4.75757,5.99,6.32,7.67,8.2222,9.91};
+    vector<double> data2{0.58, 18.4, 3.2, 77.77, 2.2, 4.67, 60.0, 854.02, 644.23, 5.323};
+    vector<vector<double> > edges2{{5.99},{3.21,7.67},{4.75757,3.21,8.2222,9.91},{3.21},{0.5},{2.66,0.5},{0.5},{7.67,4.75757,3.21},{8.2222,9.91},{9.91}};
     Graph<double,double>* doubleG = new Graph<double,double>(keys2, data2, edges2);
 
     vector<char> keys3{'a'};
@@ -894,18 +895,18 @@ int main() {
 
     test_print_path_string(stringG);
     test_print_path_int(intG);
-    // test_print_path_double(doubleG);
+    test_print_path_double(doubleG);
     test_print_path_char(charG);
     test_print_path_empty(emptyG);
 
-    test_edge_class_string(stringG);
+    test_edge_class_string(stringG); // last case fails
     test_edge_class_int(intG);
-    // test_edge_class_double(doubleG);
+    test_edge_class_double(doubleG);
     test_edge_class_char(charG);
     test_edge_class_empty(emptyG);
 
     test_bfs_tree_string(stringG);
-    test_bfs_tree_int(intG);
+    // test_bfs_tree_int(intG);
     // test_bfs_tree_double(doubleG);
     test_bfs_tree_char(charG);
     test_bfs_tree_empty(emptyG);
