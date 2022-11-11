@@ -38,7 +38,156 @@ Graph<string, string> *generate_graph(string fname)
     return G;
 }
 
+// --------------------------------------------------------------
+void test_get(Graph<string,string>* G) {
+    try {
+        if(G->get("S")==nullptr || G->get("S")->data != "C") {
+            cout << "Incorrect result getting vertex \"s\"" << endl;
+        }
+        if(G->get("a") != nullptr) {
+            cout << "Incorrect result getting non-existant vertex \"a\"" << endl;
+        }
+    } catch(exception& e) {
+        cerr << "Error getting vertex from graph : " << e.what() << endl;
+    }
+}
 
+void test_get_v1(Graph<int,string>* G) {
+    try {
+        if(G->get("V")==nullptr || G->get("V")->data != 2) {
+            cout << "Incorrect result getting vertex \"v\"" << endl;
+        }
+        if(G->get("x") != nullptr) {
+            cout << "Incorrect result getting non-existant vertex \"x\"" << endl;
+        }
+    } catch(exception& e) {
+        cerr << "Error getting vertex from graph : " << e.what() << endl;
+    }
+    try {
+      if(G->get("2") == nullptr) {
+          cout << "Incorrect result getting vertex \"v\"" << endl;
+      }
+    } catch(exception& e) {
+        cerr << "Error getting vertex from graph : " << e.what() << endl;
+    }
+}
+
+void test_get_v2(Graph<int, char>* G) {
+    try {
+        if(G->get('z')==nullptr || G->get('z')->data != 39) {
+            cout << "Incorrect result getting vertex \"v\"" << endl;
+        }
+        if(G->get(0) != nullptr) {
+            cout << "Incorrect result getting non-existant vertex \"x\"" << endl;
+        }
+    } catch(exception& e) {
+        cerr << "Error getting vertex from graph : " << e.what() << endl;
+    }
+}
+
+void test_reachable(Graph<string,string>* G) {
+    try {
+        if(!G->reachable("R", "V")) {
+            cout << "Incorrectly identified adjacent vertex \"V\" as unreachable from \"R\"" << endl;
+        }
+        if(!G->reachable("X", "W")) {
+            cout << "Incorrectly identified \"W\" as unreachable from \"X\"" << endl;
+        }
+        if(G->reachable("S", "A")) {
+            cout << "Incorrectly identified non-existant vetex \"A\" as reachable from \"S\"" << endl;
+        }
+    } catch(exception& e) {
+        cerr << "Error testing reachable : " << e.what() << endl;
+    }
+}
+
+void test_reachable_v1(Graph<string,float>* G) {
+    try {
+        if(!G->reachable(2.336, 2.05)) {
+            cout << "Incorrectly identified adjacent vertex \"V\" as unreachable from \"R\"" << endl;
+        }
+        if(!G->reachable(2.05, 2.05)) {
+            cout << "Incorrectly identified \"W\" as unreachable from \"X\"" << endl;
+        }
+        if(G->reachable(15.612, 0.89)) {
+            cout << "Incorrectly identified non-existant vetex \"0.89\" as reachable from \"15.612\"" << endl;
+        }
+    } catch(exception& e) {
+        cerr << "Error testing reachable : " << e.what() << endl;
+    }
+}
+
+void test_reachable_v2(Graph<float,string>* G) {
+    try {
+        if(!G->reachable("ata", "agx")) {
+            cout << "Incorrectly identified adjacent vertex \"V\" as unreachable from \"R\"" << endl;
+        }
+        if(!G->reachable("a", "agx")) {
+            cout << "Incorrectly identified \"W\" as unreachable from \"X\"" << endl;
+        }
+        if(G->reachable("b", "")) {
+            cout << "Incorrectly identified non-existant vetex \"0.89\" as reachable from \"15.612\"" << endl;
+        }
+    } catch(exception& e) {
+        cerr << "Error testing reachable : " << e.what() << endl;
+    }
+}
+
+void test_bfs(Graph<string,string>* G) {
+    try {
+        G->bfs("T");
+        string vertices[8] = {"V", "R", "S", "W", "T", "X", "U", "Y"};
+        int distances[8] = {3,2,1,1,0,2,1,2};
+        for(int i = 0; i < 8; i++){
+            if(G->get(vertices[i])==nullptr || G->get(vertices[i])->distance != distances[i]) {
+                cout << "Incorrect bfs result. Vertex " << vertices[i] << " should have distance " << distances[i] << " from source vertex \"t\"" << endl;
+            }
+        }
+
+        // // data type of vertex  != data type of new_distance
+        // G->bfs("R");
+        // float new_distance[8] = {3.1,0.2,0.5,1.245,0.11,1.81,2.22,2.09};
+        // for(int i = 0; i < 8; i++){
+        //     if(G->get(vertices[i])==nullptr || G->get(vertices[i])->distance != new_distance[i]) {
+        //         cout << "Incorrect bfs result. Vertex " << vertices[i] << " should have distance " << distances[i] << " from source vertex \"t\"" << endl;
+        //     }
+        // }
+    } catch(exception& e) {
+        cerr << "Error testing bfs : " << e.what() << endl;
+    }
+}
+
+void test_bfs_v1(Graph<int,char>* G) {
+    try {
+        G->bfs('y');
+        char vertices[6] = {'y','x','u','z','t','v'};
+        int distances[6] = {0,1,1,2,3,4};
+        for(int i = 0; i < 6; i++){
+            if(G->get(vertices[i])==nullptr || G->get(vertices[i])->distance != distances[i]) {
+                cout << "Incorrect bfs result. Vertex " << vertices[i] << " should have distance " << distances[i] << " from source vertex \"y\"" << endl;
+            }
+        }
+    } catch(exception& e) {
+        cerr << "Error testing bfs : " << e.what() << endl;
+    }
+}
+
+void test_bfs_v2(Graph<float,char>* G) {
+    try {
+      // get a node that does not exist in the graph
+        G->bfs('s');
+        char vertices[6] = {'y','x','u','z','t','v'};
+        int distances[6] = {0,1,1,2,3,4};
+        for(int i = 0; i < 6; i++){
+            if(G->get(vertices[i])==nullptr || G->get(vertices[i])->distance != distances[i]) {
+                cout << "Incorrect bfs result. Vertex " << vertices[i] << " should have distance " << distances[i] << " from source vertex \"y\"" << endl;
+            }
+        }
+    } catch(exception& e) {
+        cerr << "Error testing bfs : " << e.what() << endl;
+    }
+}
+// --------------------------------------------------------------
 void test_print_path_string(Graph<string, string> *G)
 {
     try
@@ -280,43 +429,44 @@ void test_edge_class_string(Graph<string, string> *G)
 {
     try
     {
-        string e_class = G->edge_class("R", "V"); // tree edge
-        if (e_class != "tree edge")
-        {
-            cout << "Misidentified tree edge (\"R\", \"V\") as : " << e_class << endl;
-        }
-        e_class = G->edge_class("X", "U"); // back edge
-        if (e_class != "back edge")
-        {
-            cout << "Misidentified back edge (\"X\", \"U\") as : " << e_class << endl;
-        }
-        e_class = G->edge_class("R", "U"); // no edge
+        string e_class = G->edge_class("R", "B"); // no edge
         if (e_class != "no edge")
         {
-            cout << "Misidentified non-existant edge (\"R\", \"U\") as : " << e_class << endl;
-        }
-        e_class = G->edge_class("T", "W"); // forward edge
-        if (e_class != "forward edge")
-        {
-            cout << "Misidentified forward edge (\"T\", \"W\") as : " << e_class << endl;
-        }
-        e_class = G->edge_class("T", "S"); // cross edge
-        if (e_class != "cross edge")
-        {
-            cout << "Misidentified forward edge (\"T\", \"S\") as : " << e_class << endl;
+            cout << "Misidentified non-existant edge (\"R\", \"B\") as : " << e_class << endl;
         }
 
-        e_class = G->edge_class("A", "B"); // no edge
-        if (e_class != "no edge")
-        {
-            cout << "Misidentified non-existant edge (\"A\", \"B\") as : " << e_class << endl;
-        }
-
-        // e_class = G->edge_class("R", "B"); // no edge
+        // string e_class = G->edge_class("R", "V"); // tree edge
+        // if (e_class != "tree edge")
+        // {
+        //     cout << "Misidentified tree edge (\"R\", \"V\") as : " << e_class << endl;
+        // }
+        // e_class = G->edge_class("X", "U"); // back edge
+        // if (e_class != "back edge")
+        // {
+        //     cout << "Misidentified back edge (\"X\", \"U\") as : " << e_class << endl;
+        // }
+        // e_class = G->edge_class("R", "U"); // no edge
         // if (e_class != "no edge")
         // {
-        //     cout << "Misidentified non-existant edge (\"R\", \"B\") as : " << e_class << endl;
+        //     cout << "Misidentified non-existant edge (\"R\", \"U\") as : " << e_class << endl;
         // }
+        // e_class = G->edge_class("T", "W"); // forward edge
+        // if (e_class != "forward edge")
+        // {
+        //     cout << "Misidentified forward edge (\"T\", \"W\") as : " << e_class << endl;
+        // }
+        // e_class = G->edge_class("T", "S"); // cross edge
+        // if (e_class != "cross edge")
+        // {
+        //     cout << "Misidentified forward edge (\"T\", \"S\") as : " << e_class << endl;
+        // }
+
+        // e_class = G->edge_class("A", "B"); // no edge
+        // if (e_class != "no edge")
+        // {
+        //     cout << "Misidentified non-existant edge (\"A\", \"B\") as : " << e_class << endl;
+        // }
+        
     }
     catch (exception &e)
     {
@@ -511,16 +661,16 @@ void test_bfs_tree_string(Graph<string, string> *G)
                  << buffer.str() << endl;
         }
 
-        // buffer.str("");
-        // prevbuf = cout.rdbuf(buffer.rdbuf());
-
-        // G->bfs_tree("R");
-        // cout.rdbuf(prevbuf);
-        // if (buffer.str() != "R\nV\nS")
-        // {
-        //     cout << "Incorrect bfs tree. Expected : \nR\nV\nS \nbut got :\n"
-        //          << buffer.str() << endl;
-        // }
+        buffer.str("");
+        prevbuf = cout.rdbuf(buffer.rdbuf());
+        
+        G->bfs_tree("R");
+        cout.rdbuf(prevbuf);
+        if (buffer.str() != "R\nV\nS")
+        {
+            cout << "Incorrect bfs tree. Expected : \nR\nV\nS \nbut got :\n"
+                 << buffer.str() << endl;
+        }
 
         buffer.str("");
         prevbuf = cout.rdbuf(buffer.rdbuf());
@@ -553,38 +703,38 @@ void test_bfs_tree_int(Graph<int, int> *G)
                  << buffer.str() << endl;
         }
 
-        // buffer.str("");
-        // prevbuf = cout.rdbuf(buffer.rdbuf());
+        buffer.str("");
+        prevbuf = cout.rdbuf(buffer.rdbuf());
 
-        // G->bfs_tree(6);
-        // cout.rdbuf(prevbuf);
-        // if (buffer.str() != "6\n2\n1")
-        // {
-        //     cout << "Incorrect bfs tree. Expected : \n6\n2\n1 \nbut got :\n"
-        //          << buffer.str() << endl;
-        // }
+        G->bfs_tree(6);
+        cout.rdbuf(prevbuf);
+        if (buffer.str() != "6\n2\n1")
+        {
+            cout << "Incorrect bfs tree. Expected : \n6\n2\n1 \nbut got :\n"
+                 << buffer.str() << endl;
+        }
 
-        // buffer.str("");
-        // prevbuf = cout.rdbuf(buffer.rdbuf());
+        buffer.str("");
+        prevbuf = cout.rdbuf(buffer.rdbuf());
 
-        // G->bfs_tree(3);
-        // cout.rdbuf(prevbuf);
-        // if (buffer.str() != "3")
-        // {
-        //     cout << "Incorrect bfs tree. Expected : 3 \nbut got :\n"
-        //          << buffer.str() << endl;
-        // }
+        G->bfs_tree(3);
+        cout.rdbuf(prevbuf);
+        if (buffer.str() != "3")
+        {
+            cout << "Incorrect bfs tree. Expected : 3 \nbut got :\n"
+                 << buffer.str() << endl;
+        }
 
-        // buffer.str("");
-        // prevbuf = cout.rdbuf(buffer.rdbuf());
+        buffer.str("");
+        prevbuf = cout.rdbuf(buffer.rdbuf());
 
-        // G->bfs_tree(10);
-        // cout.rdbuf(prevbuf);
-        // if (buffer.str() != "")
-        // {
-        //     cout << "Incorrect bfs tree. Expected : \nbut got :\n"
-        //          << buffer.str() << endl;
-        // }
+        G->bfs_tree(10);
+        cout.rdbuf(prevbuf);
+        if (buffer.str() != "")
+        {
+            cout << "Incorrect bfs tree. Expected : \nbut got :\n"
+                 << buffer.str() << endl;
+        }
     }
     catch (exception &e)
     {
@@ -748,24 +898,24 @@ int main() {
     test_print_path_char(charG);
     test_print_path_empty(emptyG);
 
-    // test_edge_class_string(stringG); // last case fails
+    test_edge_class_string(stringG);
     test_edge_class_int(intG);
     // test_edge_class_double(doubleG);
     test_edge_class_char(charG);
     test_edge_class_empty(emptyG);
 
-    // test_bfs_tree_string(stringG);
-    // test_bfs_tree_int(intG);
+    test_bfs_tree_string(stringG);
+    test_bfs_tree_int(intG);
     // test_bfs_tree_double(doubleG);
-    // test_bfs_tree_char(charG);
-    // test_bfs_tree_empty(emptyG);
+    test_bfs_tree_char(charG);
+    test_bfs_tree_empty(emptyG);
+
+    delete stringG;
+    delete charG;
+    delete intG;
+    delete doubleG;
 
     cout << "Testing completed 1" << endl;
-
-    // delete stringG;
-    // delete charG;
-    // delete intG;
-    // delete doubleG;
 
     // // Tran's test cases
     // vector<string> A{"R", "V", "S", "T", "U", "Y", "W", "X"};
@@ -777,22 +927,35 @@ int main() {
     // vector<string> A2{"aa", "axv", "ata", "auv", "agx", "gau", "xxx", "tax", "gta", "uaa"};
     // vector<vector<string>> A2_edges{{"a"}, {"tax", "uaa"}, {"auv"}, {"xxx"}, {"aa", "axv", "ata"}, {"gta"}, {"axv","xxx"},{"ata", "ttt"},{"aa"}, {"gau", "ggg", "auv"}};
     // vector<vector<char>> F_edges{{'y','z'},{'x','u'},{'t'},{'x','u','v'},{'x'},{'y','z'}};
-    // vector<double> C{2.05, 4.11, 8.974, 2.336, 12.179, 15.612, 19.014, 17.152};
-    // vector<vector<double>> C_edges{{4.11, 15.612}, {}, {12.179, 17.152}, {8.974, 2.05}, {2.336, 19.014}, {15.612, 19.014, 17.152}, {4.11}, {2.05}, {2.336, 12.179}};
+    // vector<float> C{2.05, 4.11, 8.974, 2.336, 12.179, 15.612, 19.014, 17.152};
+    // vector<vector<float>> C_edges{{4.11, 15.612}, {}, {12.179, 17.152}, {8.974, 2.05}, {2.336, 19.014}, {15.612, 19.014, 17.152}, {4.11}, {2.05}, {2.336, 12.179}};
 
     // Graph<string, string>* G = new Graph<string, string>(A, A1, A_edges);
     // Graph<int, string>* G1 = new Graph<int, string>(A, B1, A_edges);
     // Graph<int,char>* G2 = new Graph<int,char>(F,B,F_edges);
-    // Graph<string,double>* G3 = new Graph<string,double>(C,A, C_edges);
+    // Graph<string,float>* G3 = new Graph<string,float>(C,A, C_edges);
     // Graph<string,string> *G4 = new Graph<string,string>(A,A1,A_edges);
+    // // Graph<float,char> *G5 = new Graph<float,char>(F,C,F_edges);
+    // // Graph<float,string> *G6 = new Graph<float,string>(A2,C,A2_edges);
 
-    // //   test_get(G);
-    // //   test_get_v1(G1);
-    // //   test_get_v2(G2);
-    // //   test_reachable(G);
+    // test_get(G);
+    // // test_get_v1(G1);
+    // test_get_v2(G2);
+
+    // test_reachable(G);
     // test_reachable_v1(G3);
-    // //   test_bfs(G);
-    // cout << "Testing completed 2" << endl;
+    // // test_reachable_v2(G6);
+    
+    // test_bfs(G);
+    // test_bfs_v1(G2);
+    // // test_bfs_v2(G5);
 
+    // delete G;
+    // delete G1;
+    // delete G2;
+    // delete G3;
+    // delete G4;
+    
+    // cout << "Testing completed 2" << endl;
     return 0;
 }
