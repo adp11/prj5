@@ -1,4 +1,7 @@
-throw error, input in set of vertices
+line 32, destructor unsure
+finish Tran's test case + test_bfs()
+last case of edge class string
+try full tests of D
 
 
 // void print_path(keyType u, keyType v) {
@@ -21,138 +24,30 @@ throw error, input in set of vertices
 
 
 
-// void bfs_tree(keyType s) {
-//   // check if key is not in set of vertices
-//   if (table.find(s) == table.end()) {
-//     throw std::invalid_argument("key not in set of vertices");
-//   }
+// for (auto const& x : table)
+    // {
+    //   // cout << "hd" << endl;
+    //   std::cout << x.first  // string (key)
+    //             << ':' 
+    //             << x.second // string's value 
+    //             << std::endl;
+    // }
+    // if (table.find(u) == table.end()) {
+    //   cout << u << "  NOT FOUND"<< endl;
+    // } else {
+    //   cout << table[u]->key << endl;
+    //   cout << u << " FOUND" << endl;
+    // }
 
-//   this->bfs(s);
-//   int maxDepth = 0;
-//   for (int i=0; i<graph.size(); i++) {
-//     if (graph[i]->distance > maxDepth) {
-//       maxDepth = graph[i]->distance;
-//     }
-//   }
-
-//   vector<vector<string>> res;
-//   res.resize(maxDepth+1);
-//   for (int i=0; i<graph.size(); i++) {
+    // if (table.find(v) == table.end()) {
+    //   cout << v << "  NOT FOUND" << endl;
+    // } else {
+    //   cout << table[v]->key << endl;
+    //   cout << v << " FOUND" << endl;
+    // }
     
-//     keyType key = graph[i]->key;
-//     int d = graph[i]->distance;
-//     res[d].push_back(key);
-//   }
 
-//   string string_tree;
-//   // string_tree += s;
-//   for (int i=0; i<res.size(); i++) {
-//     int size = res[i].size();
-//     for (int j=0; j<size; j++) {
-//       if (j == size-1) {
-//         string_tree += res[i][j];
-//       } else {
-//         string_tree += res[i][j] + " ";
-//       }
-//     }
-//     if (i != res.size()-1) string_tree += "\n";
-//   }
-//   cout << string_tree;
-// }
+    // return "random";
 
 
-
-void test_bfs_tree_string(Graph<string, string> *G)
-{
-    try
-    {
-        stringstream buffer;
-        streambuf *prevbuf = cout.rdbuf(buffer.rdbuf());
-        G->bfs_tree("T");
-        cout.rdbuf(prevbuf);
-        if (buffer.str() != "T\nS U W\nR Y X\nV")
-        {
-            cout << "Incorrect bfs tree. Expected : \nT\nS U W\nR Y X\nV \nbut got :\n"
-                 << buffer.str() << endl;
-        }
-
-        stringstream buffer1;
-        streambuf *prevbuf1 = cout.rdbuf(buffer.rdbuf());
-
-        G->bfs_tree("R");
-        cout.rdbuf(prevbuf1);
-        if (buffer1.str() != "R\nV\nS")
-        {
-            cout << "Incorrect bfs tree. Expected : \nR\nV\nS \nbut got :\n"
-                 << buffer1.str() << endl;
-        }
-
-        stringstream buffer2;
-        streambuf *prevbuf2 = cout.rdbuf(buffer.rdbuf());
-
-        G->bfs_tree("A");
-        cout.rdbuf(prevbuf2);
-        if (buffer2.str() != "")
-        {
-            cout << "Incorrect bfs tree. Expected : \nbut got :\n"
-                 << buffer2.str() << endl;
-        }
-    }
-    catch (exception &e)
-    {
-        cerr << "Error testing bfs tree : " << e.what() << endl;
-    }
-}
-
-void test_bfs_tree_int(Graph<int, int> *G)
-{
-    try
-    {
-        stringstream buffer;
-        streambuf *prevbuf = cout.rdbuf(buffer.rdbuf());
-        G->bfs_tree(5);
-        cout.rdbuf(prevbuf);
-        if (buffer.str() != "5\n1\n2")
-        {
-            cout << "Incorrect bfs tree. Expected : \n5\n1\n2 \nbut got :\n"
-                 << buffer.str() << endl;
-        }
-
-        stringstream buffer1;
-        streambuf *prevbuf1 = cout.rdbuf(buffer1.rdbuf());
-
-        G->bfs_tree(6);
-        cout.rdbuf(prevbuf1);
-        if (buffer1.str() != "6\n2\n1")
-        {
-            cout << "Incorrect bfs tree. Expected : \n6\n2\n1 \nbut got :\n"
-                 << buffer1.str() << endl;
-        }
-
-        stringstream buffer2;
-        streambuf *prevbuf2 = cout.rdbuf(buffer2.rdbuf());
-
-        G->bfs_tree(3);
-        cout.rdbuf(prevbuf2);
-        if (buffer2.str() != "3")
-        {
-            cout << "Incorrect bfs tree. Expected : 3 \nbut got :\n"
-                 << buffer2.str() << endl;
-        }
-
-        stringstream buffer3;
-        streambuf *prevbuf3 = cout.rdbuf(buffer3.rdbuf());
-
-        G->bfs_tree(10);
-        cout.rdbuf(prevbuf3);
-        if (buffer3.str() != "")
-        {
-            cout << "Incorrect bfs tree. Expected : \nbut got :\n"
-                 << buffer3.str() << endl;
-        }
-    }
-    catch (exception &e)
-    {
-        cerr << "Error testing bfs tree : " << e.what() << endl;
-    }
-}
+    

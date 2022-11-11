@@ -62,15 +62,26 @@ public:
     }
   }
 
+  /**
+   * Precondition: no param needed
+   * Postcondition: return nothing, but we delete all memory that got allocated with "new"
+   */
   ~Graph() {
-    deallocate();
+    for (int i = 0; i<graph.size(); i++) {
+      delete graph[i];
+    }
+    graph.clear();
   }
 
   /**
-   * Precondition: param k is of type "keyType"
+   * Precondition: param k is of type "keyType". k could be invalid key where it doesn't exist
    * Postcondition: return Node whose key is same as k
    */
   Node<dataType, keyType>* get(keyType k) {
+    if (table.find(k) == table.end()) {
+      // throw std::invalid_argument("key not in set of vertices");
+      return nullptr;
+    }
     return table[k];
   }
 
@@ -88,15 +99,15 @@ public:
   }
 
   /**
-   * Precondition: param s is of type "keyType", s is the source from which the bfs algorithm starts its exploration
+   * Precondition: param s is of type "keyType", s is the source from which the bfs algorithm starts its exploration, s could be invalid key
    * Postcondition: return nothing, we should have an encoded bfs tree via properties such as parent, visited, and distance
    */
   void bfs(keyType s) {
     // check if key is not in set of vertices
     if (table.find(s) == table.end()) {
+      // throw std::invalid_argument("key not in set of vertices");
       cout << "";
       return;
-      // throw std::invalid_argument("key not in set of vertices");
     }
 
     for (int i=0; i<graph.size(); i++) {
@@ -128,11 +139,17 @@ public:
   }
 
   /**
-   * Precondition: params u and v are of type "keyType"
+   * Precondition: params u and v are of type "keyType". u and v could be invalid keys
    * Postcondition: return nothing, print out the path from u to v if reachable and print empty string otherwise
    */
   
   void print_path(keyType u, keyType v) {
+    // check if either key is not in set of vertices
+    if (table.find(u) == table.end() || table.find(v) == table.end()) {
+      // throw std::invalid_argument("u or v not in set of vertices");
+      cout << "";
+      return;
+    }
     this->bfs(u);
     string path;
     stringstream ss;
@@ -171,8 +188,7 @@ public:
 
     this->bfs(s);
     map<int, vector<keyType>> res;
-    for (int i=0; i<graph.size(); i++) {
-      // cout << graph[i]->key << " " << graph[i]->distance << endl;
+    for (int i=0; i<graph.size(); i++) { // put all elements of the same distance into a hashmap where key (distance): value (keys)
       if (graph[i]->distance != numeric_limits<int>::max()) {
         res[graph[i]->distance].push_back(graph[i]->key);
       }
@@ -180,7 +196,7 @@ public:
 
     string string_tree;
     stringstream ss;
-    for (int i=0; i<res.size(); i++) {
+    for (int i=0; i<res.size(); i++) { // convert this hashmap into corresponding string to output
       int size = res[i].size();
       for (int j=0; j<size; j++) {
         if (j == size-1) {
@@ -199,7 +215,6 @@ public:
   }
 
 
-
   /**
    * Precondition: params u and v are of type "keyType", u and v could be invalid keys where they don't exist
    * Postcondition: return the type of edge from u to v (if any), return "no edge" otherwise
@@ -210,32 +225,7 @@ public:
       // throw std::invalid_argument("u or v not in set of vertices");
       return "no edge";
     }
-    // cout << "check2" << endl;
-    // for (auto const& x : table)
-    // {
-    //   // cout << "hd" << endl;
-    //   std::cout << x.first  // string (key)
-    //             << ':' 
-    //             << x.second // string's value 
-    //             << std::endl;
-    // }
-    // if (table.find(u) == table.end()) {
-    //   cout << u << "  NOT FOUND 1"<< endl;
-    // } else {
-    //   cout << table[u]->key << endl;
-    //   cout << u << " FOUND 1" << endl;
-    // }
-
-    // if (table.find(v) == table.end()) {
-    //   cout << v << "  NOT FOUND 2" << endl;
-    // } else {
-    //   cout << table[v]->key << endl;
-    //   cout << v << " FOUND 2" << endl;
-    // }
     
-    // cout << v << "  "<< table.count('B') > 0 << endl;
-
-    // return "random";
     dfs();
     Node<dataType, keyType>* uNode = table[u];
     Node<dataType, keyType>* vNode = table[v];
@@ -313,19 +303,7 @@ private:
         dfs_visit(graph[i]);
       }
     }
-  }
-
-  /**
-   * Precondition: no param needed
-   * Postcondition: return nothing, but we delete all memory that got allocated with "new"
-   */
-  void deallocate() {
-    for (int i = 0; i<graph.size(); i++) {
-      delete graph[i];
-    }
-    graph.clear();
-  }
-  
+  }  
 };
 
 #endif
